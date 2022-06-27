@@ -1,0 +1,66 @@
+<html>
+
+<head>
+    <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script> 
+    <script src="js/amazon-cognito-auth.min.js"></script>
+    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1162.0.min.js"></script>
+    <script src="js/amazon-cognito-identity.min.js"></script>  
+    <script src="js/config.js"></script>
+</head>
+
+<body>
+    <form>
+        <h1>Please sign in</h1>
+        
+        <input type="text" id="diaryTitle"  placeholder="Entry Title" name="diaryTitle" required autofocus>
+        <input type="text" id="diaryEntry"  placeholder="How do I feel today..." name="password" required>    
+        <button type="button" onclick="submitButton()">Submit Entry</button>
+        
+    </form>
+    
+    <script>
+        
+        
+        function submitButton() {              
+            var poolData = {
+                UserPoolId : _config.cognito.userPoolId, // Your user pool id here
+                ClientId : _config.cognito.clientId, // Your client id here
+            };
+            
+            var userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);             
+            
+            var currentUser = userPool.getCurrentUser();
+            
+            var username = currentUser.username;
+            
+            // TODO CHECK IF USER IS LOGGED IN
+            
+            console.log(username);
+            
+            var postData = {
+                "username": username,
+                "diaryTitle": $("#diaryTitle").val(),
+                "diaryEntry": $("#diaryEntry").val()
+            };
+            
+            console.log(postData);
+
+            // spara brutalmente verso aws
+            $.ajax({
+                type: "POST",
+                url: "https://diary-api.herokuapp.com/api/v1/diary",
+                data: postData,
+                success: function(data) {
+                    console.log(data);
+                },
+                error: function(data) {
+                    console.log(data);
+                }
+            });
+            
+            
+        }
+    </script>
+</body>      
+
+</html>
