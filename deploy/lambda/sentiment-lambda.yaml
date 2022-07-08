@@ -1,0 +1,19 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: 'AWS::Serverless-2016-10-31'
+Description: An AWS Serverless Specification template describing your function.
+Resources:
+  sentimentlambda:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      Handler: lambda_function.lambda_handler
+      Runtime: python3.7
+      CodeUri: .
+      Description: ''
+      MemorySize: 128
+      Timeout: 183
+      Role: 'arn:aws:iam::239133939099:role/LabRole'
+      Environment:
+        Variables:
+          NLTK_DATA: /opt/python/nltk_data
+      Layers:
+        - 'arn:aws:lambda:us-east-1:239133939099:layer:diaryLayer:3'

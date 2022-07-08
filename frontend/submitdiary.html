@@ -40,15 +40,14 @@
             var postData = {
                 "username": username,
                 "diaryTitle": $("#diaryTitle").val(),
-                "diaryEntry": $("#diaryEntry").val()
+                "text": $("#diaryEntry").val()
             };
-            
-            console.log(postData);
 
             // spara brutalmente verso aws
-            $.ajax({
-                type: "POST",
-                url: "https://diary-api.herokuapp.com/api/v1/diary",
+            // TO-DO: fare con post
+            let text = $.ajax({
+                type: "GET",
+                url: _config.lambda_url,
                 data: postData,
                 success: function(data) {
                     console.log(data);
@@ -58,6 +57,7 @@
                 }
             });
             
+            console.log(text);
             
         }
     </script>
