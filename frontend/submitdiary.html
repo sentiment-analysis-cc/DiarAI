@@ -6,6 +6,19 @@
     <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1162.0.min.js"></script>
     <script src="js/amazon-cognito-identity.min.js"></script>  
     <script src="js/config.js"></script>
+    
+    <script>
+        
+        window.onload = function() {
+            var cognitoUser = getCurrentUser();
+            console.log(cognitoUser);
+            if (cognitoUser == null) {
+                window.location.href = "login.html";
+            }
+        }
+        
+    </script>
+    
 </head>
 
 <body>
@@ -22,15 +35,8 @@
         
         
         function submitButton() {              
-            var poolData = {
-                UserPoolId : _config.cognito.userPoolId, // Your user pool id here
-                ClientId : _config.cognito.clientId, // Your client id here
-            };
-            
-            var userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);             
-            
-            var currentUser = userPool.getCurrentUser();
-            
+
+            var currentUser = getCurrentUser();
             var username = currentUser.username;
             
             // TODO CHECK IF USER IS LOGGED IN
@@ -42,7 +48,7 @@
                 "diaryTitle": $("#diaryTitle").val(),
                 "text": $("#diaryEntry").val()
             };
-
+            
             // spara brutalmente verso aws
             // TO-DO: fare con post
             let text = $.ajax({

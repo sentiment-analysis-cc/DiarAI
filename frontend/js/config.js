@@ -4,6 +4,7 @@ window._config = {
         region: 'us-east-1', // e.g. us-east-2
 		clientId: '3peuo13ghjq51jnenhh9svi47u' //is this used anywhere?
     },
-    lambda_url: "https://blwdljp75pvc5eswhthjx66a4m0hdbyv.lambda-url.us-east-1.on.aws/"
+    lambda_url: "https://blwdljp75pvc5eswhthjx66a4m0hdbyv.lambda-url.us-east-1.on.aws/",
+    lambda_entries_url: "https://uuq3nqiwkutez37nremubegf6i0xqjsz.lambda-url.us-east-1.on.aws/"
 };
 
