@@ -1,11 +1,17 @@
 <html>
 
 <head>
+    
+    <link rel="stylesheet" href="css/style.css" />
+    
+    
     <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script> 
-    <script src="js/amazon-cognito-auth.min.js"></script>
+    <script src="js/lib/amazon-cognito-auth.min.js"></script>
     <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1162.0.min.js"></script>
-    <script src="js/amazon-cognito-identity.min.js"></script>  
+    <script src="js/lib/amazon-cognito-identity.min.js"></script>  
     <script src="js/config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/submitdiary.js"></script>
     
     <script>
         
@@ -22,51 +28,30 @@
 </head>
 
 <body>
-    <form>
-        <h1>Please sign in</h1>
-        
-        <input type="text" id="diaryTitle"  placeholder="Entry Title" name="diaryTitle" required autofocus>
-        <input type="text" id="diaryEntry"  placeholder="How do I feel today..." name="password" required>    
-        <button type="button" onclick="submitButton()">Submit Entry</button>
-        
-    </form>
     
-    <script>
-        
-        
-        function submitButton() {              
-
-            var currentUser = getCurrentUser();
-            var username = currentUser.username;
-            
-            // TODO CHECK IF USER IS LOGGED IN
-            
-            console.log(username);
-            
-            var postData = {
-                "username": username,
-                "diaryTitle": $("#diaryTitle").val(),
-                "text": $("#diaryEntry").val()
-            };
-            
-            // spara brutalmente verso aws
-            // TO-DO: fare con post
-            let text = $.ajax({
-                type: "GET",
-                url: _config.lambda_url,
-                data: postData,
-                success: function(data) {
-                    console.log(data);
-                },
-                error: function(data) {
-                    console.log(data);
-                }
-            });
-            
-            console.log(text);
-            
-        }
-    </script>
+    <div class="topnav">
+        <a  class="active" href="submitdiary.html">New Entry</a>
+        <a href="get_entries.html">See Entries</a>
+        <a href="graph.html">See Graph</a>
+        <a onclick="logout()" href="#">Log Out</a>
+    </div>
+    
+    <section class="section journal-section">
+        <div class="container">
+            <div class="container-row container-row-journal">
+                <div class="container-item container-item-journal">
+                    <form>
+                        <h1>New Entry</h1>
+                        
+                        <input type="text" id="diaryTitle"  placeholder="Entry Title" name="diaryTitle" required autofocus class="entry-text-title">
+                        <textarea type="text" id="diaryEntry"  placeholder="How do I feel today..." name="password" required class="entry-text-box"></textarea>    
+                        <button type="button" onclick="submitButton()">Submit Entry</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+    
 </body>      
 
 </html>

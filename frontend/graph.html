@@ -1,0 +1,43 @@
+<html>
+
+<head>
+    
+    <link rel="stylesheet" href="css/style.css" />
+    
+    
+    <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script> 
+    <script src="js/lib/amazon-cognito-auth.min.js"></script>
+    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1162.0.min.js"></script>
+    <script src="js/lib/amazon-cognito-identity.min.js"></script>  
+    <script src="js/lib/config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/submitdiary.js"></script>
+    
+    <script>
+        
+        window.onload = function() {
+            var cognitoUser = getCurrentUser();
+            console.log(cognitoUser);
+            if (cognitoUser == null) {
+                window.location.href = "login.html";
+            }
+        }
+        
+    </script>
+    
+</head>
+
+<body>
+    
+    <div class="topnav">
+        <a href="submitdiary.html">New Entry</a>
+        <a href="get_entries.html">See Entries</a>
+        <a class="active"href="graph.html">See Graph</a>
+        <a onclick="logout()" href="#">Log Out</a>
+    </div>
+    
+    <h1>Your mood trend</h1>
+    
+</body>      
+
+</html>

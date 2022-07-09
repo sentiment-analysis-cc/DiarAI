@@ -3,13 +3,15 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
+  <link rel="stylesheet" href="css/style.css" />
   <!-- Javascript SDKs-->
   <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script> 
-  <script src="js/amazon-cognito-auth.min.js"></script>
+  <script src="js/lib/amazon-cognito-auth.min.js"></script>
   <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1162.0.min.js"></script>
-  <script src="js/amazon-cognito-identity.min.js"></script>  
+  <script src="js/lib/amazon-cognito-identity.min.js"></script>  
   <script src="js/config.js"></script>
   <script src="js/utils.js"></script>
+  <script src="js/signin.js"></script>
   <script>
     
     // Check if user is already logged in before loading the other content
@@ -24,7 +26,7 @@
           }
           // Check if session is valid
           if (session.isValid()) {
-            window.location.href = "/submitdiary.html";
+            //window.location.href = "submitdiary.html";
           }
         });
       }
@@ -33,57 +35,25 @@
   
 </head>
 <body>
-  <form>
-    <h1>Please sign in</h1>
-    
-    <input type="text" id="inputUsername"  placeholder="Email address" name="username" required autofocus>
-    <input type="password" id="inputPassword"  placeholder="Password" name="password" required>    
-    <button type="button" onclick="signInButton()">Sign in</button>
-    
-  </form>
-  
-  
-  <script>
-    
-    
-    function signInButton() {
-      
-      console.log(localStorage.getItem("CognitoIdentityServiceProvider.3peuo13ghjq51jnenhh9svi47u.LastAuthUser"));
-      console.log(cognitoUser);
-      var authenticationData = {
-        Username : document.getElementById("inputUsername").value,
-        Password : document.getElementById("inputPassword").value,
-      };
-      
-      var authenticationDetails = new AmazonCognitoIdentity.AuthenticationDetails(authenticationData);
-      
-      var poolData = {
-        UserPoolId : _config.cognito.userPoolId, // Your user pool id here
-        ClientId : _config.cognito.clientId, // Your client id here
-      };
-      
-      var userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
-      
-      var userData = {
-        Username : document.getElementById("inputUsername").value,
-        Pool : userPool,
-      };
-      
-      var cognitoUser = new AmazonCognitoIdentity.CognitoUser(userData);
-      
-      cognitoUser.authenticateUser(authenticationDetails, {
-        onSuccess: function (result) {
-          var accessToken = result.getAccessToken().getJwtToken();
-          console.log(result);
-          // console.log(accessToken);	
-        },
-        
-        onFailure: function(err) {
-          alert(err.message || JSON.stringify(err));
-        },
-      });
-    }
-  </script>
+  <section class="section journal-section">
+    <div class="container">
+      <div class="container-row container-row-journal">
+        <div class="container-item container-item-journal">
+          <form>
+            <h1>Please sign in</h1>
+            
+            <div class="journal-label">
+              <input type="text" id="inputUsername"  placeholder="Email address" name="username" required autofocus class="entry-text-title">
+            </div>
+            <input type="password" id="inputPassword"  placeholder="Password" name="password" required class="entry-text-title">    
+            <button type="button" onclick="signInButton()">Sign in</button>
+            
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
 </body>
 </html>
 

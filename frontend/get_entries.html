@@ -1,12 +1,16 @@
 <html>
 
 <head>
+
+    <link rel="stylesheet" href="css/style.css" />
+
     <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script> 
-    <script src="js/amazon-cognito-auth.min.js"></script>
+    <script src="js/lib/amazon-cognito-auth.min.js"></script>
     <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1162.0.min.js"></script>
-    <script src="js/amazon-cognito-identity.min.js"></script>  
+    <script src="js/lib/amazon-cognito-identity.min.js"></script>  
     <script src="js/config.js"></script>
     <script src="js/utils.js"></script>
+    <script src="js/get_entries.js"></script>
     <script>
         
         // Check if user is already logged in before loading the other content
@@ -34,57 +38,7 @@
                 url: _config.lambda_entries_url,
                 data: postData,
                 success: function(data) {
-                    // Generate table from json entries, stored in req, with the following structure:
-                    // title of entry, date of entry, compound sentiment, id of entry
-                    
-                    var table = document.getElementById("table");
-                    var row = table.insertRow(0);
-                    var cell1 = row.insertCell(0);
-                    var cell2 = row.insertCell(1);
-                    var cell3 = row.insertCell(2);
-                    var cell4 = row.insertCell(3);
-                    cell1.innerHTML = "Title";
-                    cell2.innerHTML = "Date";
-                    cell3.innerHTML = "Sentiment";
-                    cell4.innerHTML = "ID";
-                    
-                    for (var i = 0; i < data.length; i++) {
-                        console.log(data[i]);
-                        var row = table.insertRow(i+1);
-                        row.id = data[i].id;
-                        var cell1 = row.insertCell(0);
-                        var cell2 = row.insertCell(1);
-                        var cell3 = row.insertCell(2);
-                        var cell4 = row.insertCell(3);
-                        cell1.innerHTML = "<a href=\"#"+ i + "\">" + data[i].title + "</a>";
-                        cell2.innerText = data[i].date;
-                        cell3.innerText = data[i].sentiment.compound;
-                        cell4.innerText = data[i].id;
-                    }
-
-                    $('tr').click((e) => {
-                        var id = e.currentTarget.id;
-                        console.log(id);
-                        var postData = {
-                            "username": username,
-                            "type" : "single",
-                            "id" : id,
-                        };
-                        
-                        let data = $.ajax({
-                            type: "GET",
-                            url: _config.lambda_entries_url,
-                            data: postData,
-                            success: function(data) {
-                                console.log(data);
-                            },
-                            error: function(data) {
-                                console.log(data);
-                                alert("Some error occurred :(\n" + data);
-                            }
-                        });
-                    });
-                    
+                    generateTable(data);                    
                 },
                 error: function(data) {
                     //console.log(data);
@@ -96,7 +50,17 @@
 </head>
 
 <body>
+
+    <div class="topnav">
+        <a href="submitdiary.html">New Entry</a>
+        <a class="active" href="get_entries.html">See Entries</a>
+        <a href="graph.html">See Graph</a>
+        <a onclick="logout()" href="#">Log Out</a>
+      </div>
     
+    
+      <h1>All your diary entries</h1>
+
     <table id="table"></table>
     
 </body>      
