@@ -1,0 +1,15 @@
+<component name="libraryTable">
+  <library name="Gradle: com.liftric:cognito-idp-android-debug:2.5.0@aar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/17846d58d416af57382e4b782d42e7d6/transformed/cognito-idp-debug/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/17846d58d416af57382e4b782d42e7d6/transformed/cognito-idp-debug/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/17846d58d416af57382e4b782d42e7d6/transformed/cognito-idp-debug/AndroidManifest.xml" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.liftric/cognito-idp-android-debug/2.5.0/8f615765ae2bda6d3d4b371ed9b02138efebd110/cognito-idp-android-debug-2.5.0-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.liftric/cognito-idp-android-debug/2.5.0/82966460076c59a8a5ac51447a0ee86f342d9cdf/cognito-idp-android-debug-2.5.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
