@@ -1,17 +1,17 @@
 package com.smeds.cloudcomputingproject
 
 import android.content.SharedPreferences
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.util.Log
 import android.view.View
-import android.widget.EditText
 import android.widget.TextView
-import androidx.annotation.UiThread
+import androidx.appcompat.app.AppCompatActivity
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import okhttp3.*
 import java.io.IOException
-import java.lang.Exception
+
 
 class GetEntriesActivity : AppCompatActivity() {
     lateinit var text : TextView
@@ -24,7 +24,6 @@ class GetEntriesActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_get_entries)
 
-        text = findViewById(R.id.textView2)
         prefs = PreferenceManager.getDefaultSharedPreferences(this)
 
     }
@@ -66,7 +65,7 @@ class GetEntriesActivity : AppCompatActivity() {
 
                         res = response.body!!.string()
                         this@GetEntriesActivity.runOnUiThread(java.lang.Runnable {
-                            text.text = res
+                            populateRecyclerView(res)
                         })
                         Log.i("ENTRY", res)
                     }
@@ -77,6 +76,25 @@ class GetEntriesActivity : AppCompatActivity() {
             Log.i("ENTRY", e.message!!)
             return
         }
+
+    }
+
+    fun populateRecyclerView(res: String) {
+        Log.i("ENTRY", "$res")
+
+        val entryList: List<DiaryEntry> = Gson().fromJson(res, object : TypeToken<ArrayList<DiaryEntry?>?>() {}.type)
+        Log.i("ENTRY", "EntryList: ${entryList.count()}")
+
+        // Manually add Date to each entry
+        for (entry in entryList) {
+            entry.date = entry.parseDate(entry.id)
+        }
+
+        // Populate RecyclerView
+        val recyclerView = findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.recyclerView)
+        recyclerView.adapter = EntryRecyclerAdapter(this, entryList)
+        recyclerView.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this)
+        recyclerView.visibility = View.VISIBLE
 
     }
 }
