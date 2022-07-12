@@ -21,16 +21,11 @@ function getCurrentUser() {
 }
 
 // Function to get aws session token
-function getSessionToken() {
+function getSessionToken(callback) {
     var cognitoUser = getCurrentUser();
     if (cognitoUser != null) {
         cognitoUser.getSession(function(err, session) {
-            if (err) {
-                console.log(err);
-                return null;
-            }
-            window.session = session;
-            return session.accessToken.jwtToken;
+            return callback(err, session.accessToken.jwtToken);
         });
     }
 }
