@@ -66,11 +66,8 @@ class DiaryEntryActivity : AppCompatActivity() {
                     response.use {
                         if (!response.isSuccessful) throw IOException("Unexpected code $response")
 
-                        for ((name, value) in response.headers) {
-                            println("$name: $value")
-                        }
-
-                        println(response.body!!.string())
+                        Toast.makeText(this@DiaryEntryActivity, "Succesfully created entry!", Toast.LENGTH_SHORT).show()
+                        Log.i("ENTRY", "${response.body?.string()}")
                     }
                 }
             })

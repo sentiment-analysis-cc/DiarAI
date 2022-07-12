@@ -2,12 +2,16 @@ function submitButton() {
 
     var currentUser = getCurrentUser();
     var username = currentUser.username;
+
+    // Await for session token to be available
+    var sessionToken = getSessionToken();
     
     // TODO CHECK IF USER IS LOGGED IN
     
-    console.log(username);
+    console.log(sessionToken);
     
     var postData = {
+        "token": sessionToken,
         "username": username,
         "diaryTitle": $("#diaryTitle").val(),
         "text": $("#diaryEntry").val()
@@ -30,3 +34,4 @@ function submitButton() {
     console.log(text);
     
 }
+

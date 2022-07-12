@@ -1,30 +1,42 @@
 <!DOCTYPE html>
 
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-	<!-- Javascript SDK-->
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="css/style.css" />
+  <!-- Javascript SDK-->
   <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script> 
   <script src="js/lib/amazon-cognito-auth.min.js"></script>
   <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1162.0.min.js"></script>
   <script src="js/lib/amazon-cognito-identity.min.js"></script>  
   <script src="js/config.js"></script>
   <script src="js/register.js"></script>
-  </head>
+</head>
 
-	
-  <body>
 
-    <h1 class="h3 mb-3 font-weight-normal" id="titleheader">Register an Account</h1>
-	
-	<input type="personalname" class="form-control" id="personalnameRegister" placeholder="Name" pattern=".*" required>
-    <input type="email" class="form-control" id="emailInputRegister" placeholder="Email" pattern=".*" required>
-	<input type="password" class="form-control" id="passwordInputRegister" placeholder="Password" pattern=".*" required>
-    <input type="password" class="form-control" id="confirmationpassword" placeholder="Confirm Password" pattern=".*" required>
-	<button id="mainbutton" class="btn btn-lg btn-primary btn-block" type="button" onclick="registerButton()" >Register</button>
- 
- </body>
+<body>
   
+  <section class="section journal-section">
+    <div class="container">
+      <div class="container-row container-row-journal">
+        <div class="container-item container-item-journal">
+          <form>
+            
+            <h1 class="h3 mb-3 font-weight-normal" id="titleheader">Register an Account</h1>
+            
+            <input type="personalname" class="entry-text-title" id="personalnameRegister" placeholder="Name" pattern=".*" required>
+            <input type="email" class="entry-text-title" id="emailInputRegister" placeholder="Email" pattern=".*" required>
+            <input type="password" class="entry-text-title" id="passwordInputRegister" placeholder="Password" pattern=".*" required>
+            <input type="password" class="entry-text-title" id="confirmationpassword" placeholder="Confirm Password" pattern=".*" required>
+            <button type="button" onclick="registerButton()" >Register</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+</body>
+
 </html>
 
 

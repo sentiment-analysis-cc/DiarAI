@@ -5,22 +5,48 @@
     <link rel="stylesheet" href="css/style.css" />
     
     
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script> 
     <script src="js/lib/amazon-cognito-auth.min.js"></script>
     <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1162.0.min.js"></script>
     <script src="js/lib/amazon-cognito-identity.min.js"></script>  
-    <script src="js/lib/config.js"></script>
+    <!-- <script src="js/config.js"></script> -->
     <script src="js/utils.js"></script>
-    <script src="js/submitdiary.js"></script>
+    <script src="js/chart.js"></script>
     
     <script>
         
         window.onload = function() {
+            
             var cognitoUser = getCurrentUser();
-            console.log(cognitoUser);
+            //console.log(cognitoUser);
             if (cognitoUser == null) {
                 window.location.href = "login.html";
             }
+            
+            var username = cognitoUser.username;
+            
+            //console.log(username);
+            
+            var postData = {
+                "username": username,
+                "type" : "all",
+            };
+            
+            // spara brutalmente verso aws
+            // TO-DO: fare con post
+            let data = $.ajax({
+                type: "GET",
+                url: _config.lambda_entries_url,
+                data: postData,
+                success: function(data) {
+                    createChart(data);                    
+                },
+                error: function(data) {
+                    //console.log(data);
+                    alert("Some error occurred :(\n" + data);
+                }
+            });    
         }
         
     </script>
@@ -38,6 +64,8 @@
     
     <h1>Your mood trend</h1>
     
+    <div id="chart" style="width: 900px; height: 500px"></div>
+
 </body>      
 
 </html>

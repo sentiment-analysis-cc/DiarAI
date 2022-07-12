@@ -29,8 +29,9 @@ table {
   margin: 1em auto;
 }
 
-tr {
+.table-row {
   border-bottom: 1px solid;
+  cursor: pointer;
 }
 
 td {
@@ -42,6 +43,7 @@ td {
   font-size: 1.0rem;
   font-weight: bold;
   padding: 0.5rem;
+  
 }
 
 /* Add a black background color to the top navigation */
@@ -300,4 +302,63 @@ input[class^='btn-']:hover {
   text-align: center;
   text-decoration: underline;
   text-decoration-color: lightgoldenrodyellow;
+}
+
+.modal {
+  z-index:3;
+  padding-top:100px;
+  position:fixed;
+  left:0;
+  top:0;
+  width:100%;
+  height:100%;
+  overflow:auto;
+  background-color:rgb(0,0,0);
+  background-color:rgba(0,0,0,0.4);
+}
+
+/* Modal Header */
+.modal-header {
+  padding: 2px 16px;
+  background-color: #5cb85c;
+  color: white;
+}
+
+/* Modal Body */
+.modal-body {padding: 2px 16px;}
+
+/* Modal Footer */
+.modal-footer {
+  padding: 2px 16px;
+  background-color: #5cb85c;
+  color: white;
+}
+
+/* Modal Content */
+.modal-content {
+  position: relative;
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+  animation-name: animatetop;
+  animation-duration: 0.4s
+}
+
+.close {
+  position: absolute;
+  right: 25px;
+  top: 0;
+  color: lightcoral;
+  font-size: 35px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* Add Animation */
+@keyframes animatetop {
+  from {top: -300px; opacity: 0}
+  to {top: 0; opacity: 1}
 }

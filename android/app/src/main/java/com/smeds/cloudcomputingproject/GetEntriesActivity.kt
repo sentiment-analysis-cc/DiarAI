@@ -1,22 +1,29 @@
 package com.smeds.cloudcomputingproject
 
+import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import okhttp3.*
 import java.io.IOException
 
 
-class GetEntriesActivity : AppCompatActivity() {
+class GetEntriesActivity : AppCompatActivity(), EntryRecyclerAdapter.EntryClickListener {
     lateinit var text : TextView
     lateinit var username : String
     lateinit var prefs : SharedPreferences
+    lateinit var recyclerViewAdapter: EntryRecyclerAdapter
     val url = "uuq3nqiwkutez37nremubegf6i0xqjsz.lambda-url.us-east-1.on.aws"
 
 
@@ -91,10 +98,21 @@ class GetEntriesActivity : AppCompatActivity() {
         }
 
         // Populate RecyclerView
-        val recyclerView = findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.recyclerView)
-        recyclerView.adapter = EntryRecyclerAdapter(this, entryList)
-        recyclerView.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this)
+        val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerViewAdapter = EntryRecyclerAdapter(this, entryList)
+        recyclerViewAdapter.listener = (object : EntryRecyclerAdapter.EntryClickListener {
+            override fun onItemClick(view: View, id: String) {
+                Toast.makeText(this@GetEntriesActivity, "Clicked: ${id}", Toast.LENGTH_SHORT).show()
+            }
+        })
+        recyclerView.adapter = recyclerViewAdapter
         recyclerView.visibility = View.VISIBLE
+        Log.i("ENTRY", "RecyclerView populated")
+    }
 
+    override fun onItemClick(view: View, id: String) {
+        Log.i("ENTRY", "Clicked: $id")
     }
 }
+

@@ -12,6 +12,7 @@ class EntryRecyclerAdapter (context: Context, entry : List<DiaryEntry>) :
 
     var context = context
     var entry = entry
+    lateinit var listener : EntryClickListener
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DiaryEntryHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.diary_list_items, parent, false)
@@ -22,20 +23,27 @@ class EntryRecyclerAdapter (context: Context, entry : List<DiaryEntry>) :
         val title = entry[position].title
         val sentiment = entry[position].sentiment
         val date = entry[position].date
+        val id = entry[position].id
 
         holder.txtDate.text = date
         holder.txtTitle.text = title
         holder.txtSentiment.text = sentiment.toString()
+        holder.txtId = id
     }
 
     override fun getItemCount(): Int {
         return entry.count()
     }
 
-    class DiaryEntryHolder (itemView : View) : RecyclerView.ViewHolder(itemView) {
+    interface EntryClickListener {
+        fun onItemClick(view : View, id : String)
+    }
+
+    inner class DiaryEntryHolder (itemView : View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
         val txtDate : TextView
         val txtTitle : TextView
         val txtSentiment : TextView
+        lateinit var txtId : String
 
         init {
             txtDate = itemView.findViewById(R.id.textView_date_data)
@@ -48,6 +56,11 @@ class EntryRecyclerAdapter (context: Context, entry : List<DiaryEntry>) :
             txtTitle.text = entry.title
             txtSentiment.text = entry.sentiment.toString()
         }
+
+        override fun onClick(v: View) {
+            listener.onItemClick(v, txtId)
+        }
     }
 
 }
+

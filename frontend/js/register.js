@@ -5,8 +5,9 @@ var poolData;
     
 function registerButton() {
 
-personalnamename =  document.getElementById("personalnameRegister").value;	
-username = document.getElementById("emailInputRegister").value;
+personalname =  document.getElementById("personalnameRegister").value;	
+email = document.getElementById("emailInputRegister").value;
+
 
 if (document.getElementById("passwordInputRegister").value != document.getElementById("confirmationpassword").value) {
     alert("Passwords Do Not Match!")
@@ -25,7 +26,7 @@ var attributeList = [];
 
 var dataEmail = {
     Name : 'email', 
-    Value : username, //get from form field
+    Value : email, //get from form field
 };
 
 var dataPersonalName = {
@@ -40,7 +41,7 @@ var attributePersonalName = new AmazonCognitoIdentity.CognitoUserAttribute(dataP
 attributeList.push(attributeEmail);
 attributeList.push(attributePersonalName);
 
-userPool.signUp(username, password, attributeList, null, function(err, result){
+userPool.signUp(personalname, password, attributeList, null, function(err, result){
     if (err) {
         alert(err.message || JSON.stringify(err));
         return;
