@@ -27,25 +27,33 @@
             var username = cognitoUser.username;
             
             //console.log(username);
-            
-            var postData = {
-                "username": username,
-                "type" : "all",
-            };
-            
-            // spara brutalmente verso aws
-            // TO-DO: fare con post
-            let data = $.ajax({
-                type: "GET",
-                url: _config.lambda_entries_url,
-                data: postData,
-                success: function(data) {
-                    createChart(data);                    
-                },
-                error: function(data) {
-                    //console.log(data);
-                    alert("Some error occurred :(\n" + data);
+            var sessionToken = getSessionToken((err, sessionToken) => {
+                if (err) {
+                    alert('Cannot retrieve token!')
                 }
+                
+                console.log(sessionToken);
+
+                var postData = {
+                    "token": sessionToken,
+                    "username": username,
+                    "type" : "all",
+                };
+                
+                // spara brutalmente verso aws
+                // TO-DO: fare con post
+                let data = $.ajax({
+                    type: "GET",
+                    url: _config.lambda_entries_url,
+                    data: postData,
+                    success: function(data) {
+                        createChart(data);                    
+                    },
+                    error: function(data) {
+                        //console.log(data);
+                        alert("Some error occurred :(\n" + data);
+                    }
+                });
             });    
         }
         
@@ -65,7 +73,7 @@
     <h1>Your mood trend</h1>
     
     <div id="chart" style="width: 900px; height: 500px"></div>
-
+    
 </body>      
 
 </html>

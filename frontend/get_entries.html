@@ -1,9 +1,9 @@
 <html>
 
 <head>
-
+    
     <link rel="stylesheet" href="css/style.css" />
-
+    
     <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script> 
     <script src="js/lib/amazon-cognito-auth.min.js"></script>
     <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1162.0.min.js"></script>
@@ -26,54 +26,61 @@
             
             //console.log(username);
             
-            var postData = {
-                "username": username,
-                "type" : "all",
-            };
-            
-            // spara brutalmente verso aws
-            // TO-DO: fare con post
-            let data = $.ajax({
-                type: "GET",
-                url: _config.lambda_entries_url,
-                data: postData,
-                success: function(data) {
-                    generateTable(data);                    
-                },
-                error: function(data) {
-                    //console.log(data);
-                    alert("Some error occurred :(\n" + data);
+            var sessionToken = getSessionToken((err, sessionToken) => {
+                if (err) {
+                    alert('Cannot retrieve token!')
                 }
-            });    
+                
+                var postData = {
+                    "token": sessionToken,
+                    //"username": username,
+                    "type" : "all",
+                };
+                
+                // spara brutalmente verso aws
+                // TO-DO: fare con post
+                let data = $.ajax({
+                    type: "GET",
+                    url: _config.lambda_entries_url,
+                    data: postData,
+                    success: function(data) {
+                        generateTable(data);                    
+                    },
+                    error: function(data) {
+                        //console.log(data);
+                        alert("Some error occurred :(\n" + data);
+                    }
+                });  
+            });  
         }
     </script>
 </head>
 
 <body>
-
+    
     <div class="topnav">
         <a href="submitdiary.html">New Entry</a>
         <a class="active" href="get_entries.html">See Entries</a>
         <a href="graph.html">See Graph</a>
         <a onclick="logout()" href="#">Log Out</a>
-      </div>
+    </div>
     
     
-      <h1>All your diary entries</h1>
-
+    <h1>All your diary entries</h1>
+    
     <table id="table"></table>
-
+    
     <!-- Modal content -->
     <div class="modal" id="modal" style="display: none;">
-    <div id="modalcontent" class="modal-content">
-        <span class="close" onclick="document.getElementById('modal').style.display='none'">&times;</span>
-        <h2 id="modal-title"></h2>
-        <p id="modal-text"></p>
+        <div id="modalcontent" class="modal-content">
+            <span class="close" onclick="document.getElementById('modal').style.display='none'">&times;</span>
+            <h2 id="modal-title"></h2>
+            <p id="modal-text"></p>
+        </div>
     </div>
-    </div>
-
-
-
+    
+    
+    
     
 </body>      
 
