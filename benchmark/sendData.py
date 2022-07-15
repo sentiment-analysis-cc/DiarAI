@@ -33,12 +33,16 @@ def numberedLogin(num):
 
 def doRequest(result, token, i):
     texts = initTexts(sizeText)
+    index = 0
     print("[DEBUG] Text list created! Thread number " + str(i))
     start_time = time.time()
-    for text in texts:
-        params = ({"diaryTitle": getRandomString(20), "text": text, "token": token})
+    while time.time() <= endTime:
+        params = ({"diaryTitle": getRandomString(20), "text": texts[index], "token": token})
         res = requests.get(basepath, params=params)
         print("[DEBUG] Status Code: " + str(res.status_code) + "; Thread number " + str(i))
+        index = (index + 1) % len(texts)
+        if index == 0:
+            random.shuffle(texts)
     result.append(time.time() - start_time)
 
 def getRandomString(num):
@@ -48,6 +52,9 @@ def getRandomString(num):
 basepath = "https://blwdljp75pvc5eswhthjx66a4m0hdbyv.lambda-url.us-east-1.on.aws/"
 numThreads = 16
 sizeText = 5
+startGlobalTime = time.time()
+deltaTime = 120  # sec
+endTime = startGlobalTime + deltaTime
 
 args = sys.argv
 argsLen = len(args)
@@ -68,7 +75,6 @@ tokens = loginUsers(users)
 
 threads = []
 res = []
-
 
 print("--- Starting to fill texts... ---")
 for i in range(numThreads): 
