@@ -36,13 +36,19 @@ def doRequest(result, token, i):
     index = 0
     print("[DEBUG] Text list created! Thread number " + str(i))
     start_time = time.time()
-    while time.time() <= endTime:
+    localEndTime = time.time() + deltaTime
+    # Print current time in humanly readable format
+    s= time.strftime("%H:%M:%S", time.localtime(start_time))
+    e= time.strftime("%H:%M:%S", time.localtime(localEndTime))
+    print(f"[DEBUG] Start time for thread {i}: {s} - End time: {e}")
+    while time.time() <= localEndTime:
         params = ({"diaryTitle": getRandomString(20), "text": texts[index], "token": token})
         res = requests.get(basepath, params=params)
         print("[DEBUG] Status Code: " + str(res.status_code) + "; Thread number " + str(i))
         index = (index + 1) % len(texts)
         if index == 0:
             random.shuffle(texts)
+    print("--- Thread number " + str(i) + " finished! ---")
     result.append(time.time() - start_time)
 
 def getRandomString(num):
@@ -53,8 +59,8 @@ basepath = "https://blwdljp75pvc5eswhthjx66a4m0hdbyv.lambda-url.us-east-1.on.aws
 numThreads = 16
 sizeText = 5
 startGlobalTime = time.time()
-deltaTime = 120  # sec
-endTime = startGlobalTime + deltaTime
+deltaTime = 600  # sec
+#endTime = startGlobalTime + deltaTime
 
 args = sys.argv
 argsLen = len(args)
@@ -64,7 +70,9 @@ if argsLen > 1:
 if argsLen > 2:
     sizeText = int(args[2])
 
+print("--- Creating users... ---")
 users = createUsers(numThreads)
+print("--- Logging in users... ---")
 tokens = loginUsers(users)
 
 #tokens = numberedLogin(numThreads)
