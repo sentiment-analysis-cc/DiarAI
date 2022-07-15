@@ -50,6 +50,8 @@ f.close()
 threads = []
 res = []
 
+
+print("--- Starting to fill texts... ---")
 for i in range(numThreads): 
 	t = threading.Thread(target=doRequest, args=[res, i])
 	t.daemon=True
@@ -62,3 +64,8 @@ for t in threads:
 	t.join()
 
 print(res)
+min = min(res)
+max = max(res)
+avg = sum(res) / len(res)
+
+print("Minimum: "+str(min)+"; Maximum: "+str(max)+"; Average: "+str(avg))
