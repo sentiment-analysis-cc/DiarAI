@@ -6,6 +6,8 @@ import random
 import string
 import time
 import sys
+from autoLogin import *
+
 
 def initTexts(num):
     lst = []
@@ -15,13 +17,26 @@ def initTexts(num):
         lst.append(main.sentence() + " " + main.sentence())
     return lst
 
-def doRequest(result, i):
+def createUsers(num):
+    lst = []
+    for i in range(num):
+        user = f"test{i}"
+        signUp(user, f"test{i}@test.com", "ciaociao")
+        lst.append(user)
+    return lst
+
+def loginUsers(lst):
+    return list(map(lambda user : login(user, "ciaociao"), lst))
+
+def numberedLogin(num):
+    return loginUsers(list(map(lambda x: f"test{x}", range(num))))
+
+def doRequest(result, token, i):
     texts = initTexts(sizeText)
     print("[DEBUG] Text list created! Thread number " + str(i))
     start_time = time.time()
     for text in texts:
-        params = misc.copy()
-        params.update({"diaryTitle": getRandomString(20), "text": text})
+        params = ({"diaryTitle": getRandomString(20), "text": text, "token": token})
         res = requests.get(basepath, params=params)
         print("[DEBUG] Status Code: " + str(res.status_code) + "; Thread number " + str(i))
     result.append(time.time() - start_time)
@@ -42,10 +57,14 @@ if argsLen > 1:
 if argsLen > 2:
     sizeText = int(args[2])
 
+users = createUsers(numThreads)
+tokens = loginUsers(users)
 
-f = open('misc.json')
-misc = json.load(f)
-f.close()
+#tokens = numberedLogin(numThreads)
+
+# f = open('misc.json')
+# misc = json.load(f)
+# f.close()
 
 threads = []
 res = []
@@ -53,7 +72,7 @@ res = []
 
 print("--- Starting to fill texts... ---")
 for i in range(numThreads): 
-	t = threading.Thread(target=doRequest, args=[res, i])
+	t = threading.Thread(target=doRequest, args=[res, tokens[i], i])
 	t.daemon=True
 	threads.append(t)
 

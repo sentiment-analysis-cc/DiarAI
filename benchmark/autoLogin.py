@@ -1,4 +1,3 @@
-from cmath import log
 import boto3
 
 CLIENT_ID = "2iujemsjc32fgm5vj2sb5b7s77"
@@ -13,7 +12,6 @@ def signUp(username, email, password):
                     UserAttributes=[{'Name': 'email',
                                     'Value': email}])
     except Exception as e:
-        # Probably user already exists
         return False
     return True
     
@@ -28,3 +26,5 @@ def login(username, password):
             ClientId=CLIENT_ID)
 
     return response['AuthenticationResult']['AccessToken']
+
+
