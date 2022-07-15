@@ -5,6 +5,7 @@ import threading
 import random
 import string
 import time
+import sys
 
 def initTexts(num):
     lst = []
@@ -28,9 +29,19 @@ def doRequest(result, i):
 def getRandomString(num):
     return ''.join(random.choices(string.ascii_uppercase + string.digits, k = num))
 
+
 basepath = "https://blwdljp75pvc5eswhthjx66a4m0hdbyv.lambda-url.us-east-1.on.aws/"
 numThreads = 16
 sizeText = 5
+
+args = sys.argv
+argsLen = len(args)
+
+if argsLen > 1:
+    numThreads = int(args[1])
+if argsLen > 2:
+    sizeText = int(args[2])
+
 
 f = open('misc.json')
 misc = json.load(f)
