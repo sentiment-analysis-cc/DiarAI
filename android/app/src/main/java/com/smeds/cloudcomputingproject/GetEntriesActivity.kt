@@ -47,6 +47,7 @@ class GetEntriesActivity : AppCompatActivity(), EntryRecyclerAdapter.EntryClickL
             .scheme("https")
             .host(url)
             .addQueryParameter("username", username)
+            .addQueryParameter("token", prefs.getString("token", "").toString())
             .addQueryParameter("type", "all")
             .build()
 

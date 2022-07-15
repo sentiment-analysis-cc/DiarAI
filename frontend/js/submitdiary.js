@@ -25,6 +25,7 @@ function submitButton() {
             url: "https://blwdljp75pvc5eswhthjx66a4m0hdbyv.lambda-url.us-east-1.on.aws/", //_config.lambda_url,
             data: postData,
             success: function(data) {
+                alert("Succesfully submit entry! Your sentiment value is " + data["compound"])
                 console.log(data);
             },
             error: function(data) {

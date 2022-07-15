@@ -10,6 +10,7 @@ import android.view.View
 import android.widget.EditText
 import android.widget.Toast
 import okhttp3.*
+import org.json.JSONObject
 import java.io.IOException
 import java.lang.Exception
 
@@ -46,6 +47,7 @@ class DiaryEntryActivity : AppCompatActivity() {
             .scheme("https")
             .host(url)
             .addQueryParameter("username", username)
+            .addQueryParameter("token", prefs.getString("token", "").toString())
             .addQueryParameter("diaryTitle", title)
             .addQueryParameter("text", entry)
             .build()
@@ -66,8 +68,26 @@ class DiaryEntryActivity : AppCompatActivity() {
                     response.use {
                         if (!response.isSuccessful) throw IOException("Unexpected code $response")
 
-                        Toast.makeText(this@DiaryEntryActivity, "Succesfully created entry!", Toast.LENGTH_SHORT).show()
-                        Log.i("ENTRY", "${response.body?.string()}")
+                        // Trasform response in json
+                        val responseBody = response.body?.string()
+                        Log.i("ENTRY", responseBody.toString())
+                        val json = responseBody?.let { JSONObject(it) }
+
+                        // Get the compound
+                        val compound = json?.getDouble("compound")
+                        val res = if (compound!! > 0.5) {
+                            ":)"
+                        } else if (compound < -0.5) {
+                            ":("
+                        } else {
+                            ":|"
+                        }
+
+                        runOnUiThread(Runnable {
+                            Toast.makeText(this@DiaryEntryActivity, "$res", Toast.LENGTH_LONG).show()
+                        })
+//                        Toast.makeText(this@DiaryEntryActivity, "Succesfully created entry!", Toast.LENGTH_SHORT).show()
+//                        Log.i("ENTRY", "${response.body?.string()}")
                     }
                 }
             })

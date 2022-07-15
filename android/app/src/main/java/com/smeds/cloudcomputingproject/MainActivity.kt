@@ -20,12 +20,14 @@ class MainActivity : AppCompatActivity() {
     lateinit var mail : String
     lateinit var password : String
     lateinit var prefs : SharedPreferences
+    val provider = IdentityProviderClient("us-east-1", "2iujemsjc32fgm5vj2sb5b7s77")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         prefs = PreferenceManager.getDefaultSharedPreferences(this)
+
     }
 
     fun signIn(view: View) {
@@ -34,7 +36,7 @@ class MainActivity : AppCompatActivity() {
         password = findViewById<EditText>(R.id.pw_text).text.toString()
 
         lifecycleScope.launch {
-            val provider = IdentityProviderClient("us-east-1", "3peuo13ghjq51jnenhh9svi47u")
+
             lateinit var accessToken : String
             var res = false
             provider.signIn(mail, password).fold(
@@ -65,7 +67,8 @@ class MainActivity : AppCompatActivity() {
 
             val prefsEditor = prefs.edit()
             prefsEditor.putString("username", usernameString)
-            prefsEditor.putString("accessToken", accessToken)
+            prefsEditor.putString("token", accessToken)
+            prefsEditor.putBoolean("loggedIn", true)
             prefsEditor.commit()
 
             val intent = Intent(this@MainActivity, DiaryEntryActivity::class.java)
