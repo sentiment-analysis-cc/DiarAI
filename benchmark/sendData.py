@@ -1,4 +1,3 @@
-import json
 import requests
 from essential_generators import DocumentGenerator
 import threading
@@ -7,7 +6,33 @@ import string
 import time
 import sys
 from autoLogin import *
+import argparse
 
+basepath = "https://blwdljp75pvc5eswhthjx66a4m0hdbyv.lambda-url.us-east-1.on.aws/"
+numThreads = 16
+sizeText = 5
+deltaTime = 600  # sec
+
+parser = argparse.ArgumentParser(description='Optional app description')
+
+parser.add_argument('--threads', type=int,
+                    help='Number of threads', default=numThreads)
+
+parser.add_argument('--text-len', type=int,
+                    help='Length of text array', default=sizeText)
+
+parser.add_argument('--executioin-time', type=int,
+                    help='Execution time on a single thread', default=deltaTime)
+
+parser.add_argument('--create-users', action='store_true',
+                    help='Sign up new users')
+
+args = parser.parse_args()
+
+numThreads, sizeText, deltaTime, reSignUp = vars(args).values()
+
+
+### Functions ###
 
 def initTexts(num):
     lst = []
@@ -54,37 +79,26 @@ def doRequest(result, token, i):
 def getRandomString(num):
     return ''.join(random.choices(string.ascii_uppercase + string.digits, k = num))
 
+print('Starting script with')
+print(f'Number of thread: {numThreads}')
+print(f'Text list size: {sizeText}')
+print(f'Execution time: {deltaTime}s')
+print()
 
-basepath = "https://blwdljp75pvc5eswhthjx66a4m0hdbyv.lambda-url.us-east-1.on.aws/"
-numThreads = 16
-sizeText = 5
-startGlobalTime = time.time()
-deltaTime = 600  # sec
-#endTime = startGlobalTime + deltaTime
 
-args = sys.argv
-argsLen = len(args)
-
-if argsLen > 1:
-    numThreads = int(args[1])
-if argsLen > 2:
-    sizeText = int(args[2])
-
-print("--- Creating users... ---")
-users = createUsers(numThreads)
-print("--- Logging in users... ---")
-tokens = loginUsers(users)
-
-#tokens = numberedLogin(numThreads)
-
-# f = open('misc.json')
-# misc = json.load(f)
-# f.close()
+if reSignUp:
+    print("--- Creating users... ---")
+    users = createUsers(numThreads)
+    print("--- Logging in users ---")
+    tokens = loginUsers(users)
+else:
+    print("--- Logging in users ---")
+    tokens = numberedLogin(numThreads)
 
 threads = []
 res = []
 
-print("--- Starting to fill texts... ---")
+print("--- Starting to fill texts ---")
 for i in range(numThreads): 
 	t = threading.Thread(target=doRequest, args=[res, tokens[i], i])
 	t.daemon=True
@@ -102,3 +116,5 @@ max = max(res)
 avg = sum(res) / len(res)
 
 print("Minimum: "+str(min)+"; Maximum: "+str(max)+"; Average: "+str(avg))
+
+
