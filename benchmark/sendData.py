@@ -4,7 +4,6 @@ import threading
 import random
 import string
 import time
-import sys
 from autoLogin import *
 import argparse
 
@@ -21,7 +20,7 @@ parser.add_argument('--threads', type=int,
 parser.add_argument('--text-len', type=int,
                     help='Length of text array', default=sizeText)
 
-parser.add_argument('--executioin-time', type=int,
+parser.add_argument('--execution-time', type=int,
                     help='Execution time on a single thread', default=deltaTime)
 
 parser.add_argument('--create-users', action='store_true',
