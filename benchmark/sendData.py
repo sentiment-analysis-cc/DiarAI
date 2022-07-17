@@ -7,7 +7,6 @@ import string
 import time
 from autoLogin import *
 import argparse
-from tqdm import tqdm
 
 basepathWrite = "https://blwdljp75pvc5eswhthjx66a4m0hdbyv.lambda-url.us-east-1.on.aws/"
 basepathRead = "https://uuq3nqiwkutez37nremubegf6i0xqjsz.lambda-url.us-east-1.on.aws/"
@@ -46,7 +45,7 @@ stepLen = deltaTime / len(lst)
 
 def initTexts(num, res):
     main = DocumentGenerator()
-    for _ in tqdm(range(num)):
+    for _ in range(num):
         res.append(main.sentence() + " " + main.sentence())
 
 def createUsers(num):
