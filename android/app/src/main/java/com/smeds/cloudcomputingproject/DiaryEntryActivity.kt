@@ -86,8 +86,7 @@ class DiaryEntryActivity : AppCompatActivity() {
                         runOnUiThread(Runnable {
                             Toast.makeText(this@DiaryEntryActivity, "$res", Toast.LENGTH_LONG).show()
                         })
-//                        Toast.makeText(this@DiaryEntryActivity, "Succesfully created entry!", Toast.LENGTH_SHORT).show()
-//                        Log.i("ENTRY", "${response.body?.string()}")
+
                     }
                 }
             })

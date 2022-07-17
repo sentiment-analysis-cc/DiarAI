@@ -8,8 +8,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -24,6 +27,7 @@ class GetEntriesActivity : AppCompatActivity(), EntryRecyclerAdapter.EntryClickL
     lateinit var username : String
     lateinit var prefs : SharedPreferences
     lateinit var recyclerViewAdapter: EntryRecyclerAdapter
+    lateinit var dialog : AlertDialog
     val url = "uuq3nqiwkutez37nremubegf6i0xqjsz.lambda-url.us-east-1.on.aws"
 
 
@@ -115,5 +119,7 @@ class GetEntriesActivity : AppCompatActivity(), EntryRecyclerAdapter.EntryClickL
     override fun onItemClick(view: View, id: String) {
         Log.i("ENTRY", "Clicked: $id")
     }
+
+
 }
 
