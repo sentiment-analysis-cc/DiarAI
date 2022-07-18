@@ -85,9 +85,10 @@ def doWriteRequest(result, token, i, textList):
             startRequest = time.time()
             res = requests.get(basepathWrite, params=params)
             print("[DEBUG] Status Code: " + str(res.status_code) + "; Thread number " + str(i))
-            jsonBody = json.loads(res.content)
-            jsonBody.update({"start_client_request": startRequest})
-            bodies.append(jsonBody)
+            if res.status_code == 200:
+                jsonBody = json.loads(res.content)
+                jsonBody.update({"start_client_request": startRequest})
+                bodies.append(jsonBody)
         else:
             time.sleep(stepLen - 0.5)
         index = (index + 1) % len(texts)
@@ -120,9 +121,10 @@ def doReadRequest(result, token, i):
             startRequest = time.time()
             res = requests.get(basepathRead, params=params)
             print("[DEBUG] Status Code: " + str(res.status_code) + "; Thread number " + str(i))
-            jsonBody = json.loads(res.content)
-            jsonBody.update({"start_client_request": startRequest})
-            bodies.append(jsonBody)
+            if res.status_code == 200: 
+                jsonBody = json.loads(res.content)
+                jsonBody.update({"start_client_request": startRequest})
+                bodies.append(jsonBody)
         else:
             time.sleep(stepLen - 0.5)
         index += 1
@@ -220,5 +222,9 @@ bodies = flatBodies
 
 flatBodies.sort(key=lambda x: x['start_time'])
 print(flatBodies)
+
+with open(f'benchmark_{time.time()}.txt', 'w') as f:
+    f.write(json.dumps(flatBodies))
+    f.close()
 
 benchmarkPlot(flatBodies)
