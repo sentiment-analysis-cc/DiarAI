@@ -7,6 +7,7 @@ import string
 import time
 from autoLogin import *
 import argparse
+import json
 
 basepathWrite = "https://blwdljp75pvc5eswhthjx66a4m0hdbyv.lambda-url.us-east-1.on.aws/"
 basepathRead = "https://uuq3nqiwkutez37nremubegf6i0xqjsz.lambda-url.us-east-1.on.aws/"
@@ -67,6 +68,7 @@ def doWriteRequest(result, token, i, textList):
     index = 0
     start_time = time.time()
     localEndTime = start_time + deltaTime
+    bodies = []
     # Print current time in humanly readable format
     if stopMode == "time":
         s= time.strftime("%H:%M:%S", time.localtime(start_time))
@@ -79,8 +81,10 @@ def doWriteRequest(result, token, i, textList):
             active = canIRun(i)
             print(f"Thread: {i}; canIRun: {active}")
         if active:
+            startRequest = time.time()
             res = requests.get(basepathWrite, params=params)
             print("[DEBUG] Status Code: " + str(res.status_code) + "; Thread number " + str(i))
+            bodies.append(json.decoder(res.content).update({"start_client_request": startRequest}))
         else:
             time.sleep(stepLen)
         index = (index + 1) % len(texts)
@@ -92,24 +96,28 @@ def doWriteRequest(result, token, i, textList):
         if stopMode == "incremental" and time.time() > globalTime + deltaTime:
             break
     print("--- Thread number " + str(i) + " finished! ---")
-    result.append(time.time() - start_time)
+    obj = {"bodies": bodies, "thread_time": time.time() - start_time}
+    result.append(obj)
 
 def doReadRequest(result, token, i):
     index = 0
     start_time = time.time()
     localEndTime = start_time + deltaTime
+    bodies = []
     if stopMode == "time":
         s= time.strftime("%H:%M:%S", time.localtime(start_time))
         e= time.strftime("%H:%M:%S", time.localtime(localEndTime))
         print(f"[DEBUG] Start time for thread {i}: {s} - End time: {e}")
     while time.time() <= localEndTime or stopMode == 'num' or stopMode == "incremental":
-        params = ({"type": "all", "token": token})
+        params = ({"type": "benchmark", "token": token})
         active = True
         if stopMode == "incremental":
             active = canIRun(i)
         if active:
+            startRequest = time.time()
             res = requests.get(basepathRead, params=params)
             print("[DEBUG] Status Code: " + str(res.status_code) + "; Thread number " + str(i))
+            bodies.append(json.decoder(res.content).update({"start_client_request": startRequest}))
         else:
             time.sleep(stepLen)
         index += 1
@@ -118,7 +126,8 @@ def doReadRequest(result, token, i):
         elif stopMode == "incremental" and time.time() > globalTime + deltaTime:
             break
     print("--- Thread number " + str(i) + " finished! ---")
-    result.append(time.time() - start_time)
+    obj = {"bodies": bodies, "thread_time": time.time() - start_time}
+    result.append(obj)
 
 
 def getRandomString(num):
@@ -188,9 +197,19 @@ for t in threads:
 for t in threads: 
     t.join()
 
-print(res)
-min = min(res)
-max = max(res)
-avg = sum(res) / len(res)
-
+threadsTime = list(map(lambda x: x["thread_time"], res))
+print(threadsTime)
+min = min(threadsTime)
+max = max(threadsTime)
+avg = sum(threadsTime) / len(threadsTime)
 print("Minimum: "+str(min)+"; Maximum: "+str(max)+"; Average: "+str(avg))
+
+bodies = list(map(lambda x: x['bodies'], res))
+
+# Flat list
+flatBodies = []
+for x in bodies:
+    flatBodies += bodies
+bodies = flatBodies
+
+# Plot results
