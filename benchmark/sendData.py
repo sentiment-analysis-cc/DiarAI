@@ -8,6 +8,7 @@ import time
 from autoLogin import *
 import argparse
 import json
+from plotter import benchmarkPlot
 
 basepathWrite = "https://blwdljp75pvc5eswhthjx66a4m0hdbyv.lambda-url.us-east-1.on.aws/"
 basepathRead = "https://uuq3nqiwkutez37nremubegf6i0xqjsz.lambda-url.us-east-1.on.aws/"
@@ -75,7 +76,7 @@ def doWriteRequest(result, token, i, textList):
         e= time.strftime("%H:%M:%S", time.localtime(localEndTime))
         print(f"[DEBUG] Start time for thread {i}: {s} - End time: {e}")
     while time.time() <= localEndTime or stopMode == 'num' or stopMode == "incremental":
-        params = ({"diaryTitle": getRandomString(20), "text": texts[index], "token": token})
+        params = ({"diaryTitle": getRandomString(20), "text": texts[index], "token": token, "type": "benchmark"})
         active = True
         if stopMode == "incremental":
             active = canIRun(i)
@@ -84,9 +85,12 @@ def doWriteRequest(result, token, i, textList):
             startRequest = time.time()
             res = requests.get(basepathWrite, params=params)
             print("[DEBUG] Status Code: " + str(res.status_code) + "; Thread number " + str(i))
-            bodies.append(json.decoder(res.content).update({"start_client_request": startRequest}))
+            if res.status_code == 200:
+                jsonBody = json.loads(res.content)
+                jsonBody.update({"start_client_request": startRequest})
+                bodies.append(jsonBody)
         else:
-            time.sleep(stepLen)
+            time.sleep(stepLen - 0.5)
         index = (index + 1) % len(texts)
         if index == 0:
             if stopMode == "time" or stopMode == "incremental":
@@ -117,9 +121,12 @@ def doReadRequest(result, token, i):
             startRequest = time.time()
             res = requests.get(basepathRead, params=params)
             print("[DEBUG] Status Code: " + str(res.status_code) + "; Thread number " + str(i))
-            bodies.append(json.decoder(res.content).update({"start_client_request": startRequest}))
+            if res.status_code == 200: 
+                jsonBody = json.loads(res.content)
+                jsonBody.update({"start_client_request": startRequest})
+                bodies.append(jsonBody)
         else:
-            time.sleep(stepLen)
+            time.sleep(stepLen - 0.5)
         index += 1
         if stopMode == "num" and index >= sizeText:
             break
@@ -198,7 +205,6 @@ for t in threads:
     t.join()
 
 threadsTime = list(map(lambda x: x["thread_time"], res))
-print(threadsTime)
 min = min(threadsTime)
 max = max(threadsTime)
 avg = sum(threadsTime) / len(threadsTime)
@@ -209,7 +215,16 @@ bodies = list(map(lambda x: x['bodies'], res))
 # Flat list
 flatBodies = []
 for x in bodies:
-    flatBodies += bodies
+    flatBodies += x
 bodies = flatBodies
 
 # Plot results
+
+flatBodies.sort(key=lambda x: x['start_time'])
+print(flatBodies)
+
+with open(f'benchmark_{time.time()}.txt', 'w') as f:
+    f.write(json.dumps(flatBodies))
+    f.close()
+
+benchmarkPlot(flatBodies)

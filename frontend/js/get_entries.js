@@ -26,7 +26,7 @@ function generateTable(data) {
         row.className = "table-row";
         row.id = data[i].id;
         var cell1 = row.insertCell(0);
-        cell1.id = "title";
+        //cell1.id = "title";
         var cell2 = row.insertCell(1);
         var cell3 = row.insertCell(2);
         var cell4 = row.insertCell(3);
@@ -61,17 +61,21 @@ function generateTable(data) {
                     window.test = e.currentTarget;
                     
                     var title = $(e.currentTarget).children().first().text();
-                    
+                    var sentiment=$(e.currentTarget).find("td:eq(2)").text();
+
                     // Get modal from document
                     var modal = document.getElementById("modal");
                     // Get the modal title
                     var modalTitle = document.getElementById("modal-title");
                     // Get the modal-text
                     var modalText = document.getElementById("modal-text");
+                    // Get the modal-sentiment text
+                    var modalSentiment = document.getElementById("modal-sentiment");
                     
                     // Substitute stuff!
                     modalTitle.innerText = title;
                     modalText.innerText = data.text;
+                    modalSentiment.innerText = "Sentiment: " + sentiment;
                     
                     // Set modal visible
                     modal.style.display = "block";
