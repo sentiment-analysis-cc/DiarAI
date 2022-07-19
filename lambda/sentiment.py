@@ -6,19 +6,30 @@ import time
 
 def lambda_handler(event, context):
     queryStr = event["queryStringParameters"]
+    bench = False
+    if "type" in queryStr and queryStr["type"] == "benchmark":
+        start_time = time.time()
+        bench = True
     text = queryStr["text"]
     res = computeSentiment(text)
     title = queryStr["diaryTitle"]
-    user = queryStr["username"]
+    token = queryStr["token"]
+    cognito = boto3.client('cognito-idp')
+    user = cognito.get_user(AccessToken = token)
+    user = user['Username']
+    
     filename = f'{user}/{time.time()}.txt'
     
     upload2Bucket(text, filename)
     
     putInDynamoDB(filename, title, user, res)
     
+    body = res
+    if bench:
+        body = {"execution_time": time.time() - start_time, "start_time": start_time}
     return {
         'statusCode': 200,
-        'body': json.dumps(res)
+        'body': json.dumps(body)
     }
 
 
