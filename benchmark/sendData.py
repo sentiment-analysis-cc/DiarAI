@@ -14,7 +14,7 @@ basepathWrite = "https://blwdljp75pvc5eswhthjx66a4m0hdbyv.lambda-url.us-east-1.o
 basepathRead = "https://uuq3nqiwkutez37nremubegf6i0xqjsz.lambda-url.us-east-1.on.aws/"
 numThreads = 16
 sizeText = 5
-deltaTime = 600  # sec
+executionTime = 600  # sec
 
 parser = argparse.ArgumentParser(description='Optional app description')
 
@@ -28,7 +28,7 @@ parser.add_argument('--stop-mode' , '-sm', type=str, choices=['time', 'num', 'in
                     help='The stopping mode', default='time')
 
 parser.add_argument('--execution-time' , '-et', type=int,
-                    help='Execution time on a single thread', default=deltaTime)
+                    help='Execution time on a single thread', default=executionTime)
 
 parser.add_argument('--create-users', '-c', action='store_true',
                     help='Sign up new users')
@@ -38,10 +38,10 @@ parser.add_argument('--mode', '-m', type=str, required=True, choices=['write', '
 
 args = parser.parse_args()
 
-numThreads, sizeText, stopMode, deltaTime, reSignUp, mode = vars(args).values()
+numThreads, sizeText, stopMode, executionTime, reSignUp, mode = vars(args).values()
 
-lst = [10, 20, 50, 100, 100, 100, 70, 50, 20]
-stepLen = deltaTime / len(lst)
+lst = [10, 20, 50, 100, 100, 100, 70, 50, 20, 10]
+stepLen = executionTime / len(lst)
 
 ### Functions ###
 
@@ -68,7 +68,7 @@ def doWriteRequest(result, token, i, textList):
     texts = textList
     index = 0
     start_time = time.time()
-    localEndTime = start_time + deltaTime
+    localEndTime = start_time + executionTime
     bodies = []
     # Print current time in humanly readable format
     if stopMode == "time":
@@ -86,18 +86,22 @@ def doWriteRequest(result, token, i, textList):
             res = requests.get(basepathWrite, params=params)
             print("[DEBUG] Status Code: " + str(res.status_code) + "; Thread number " + str(i))
             if res.status_code == 200:
-                jsonBody = json.loads(res.content)
-                jsonBody.update({"start_client_request": startRequest})
-                bodies.append(jsonBody)
+                try: 
+                    jsonBody = json.loads(res.content)
+                    jsonBody.update({"start_client_request": startRequest})
+                    bodies.append(jsonBody)
+                except AttributeError:
+                    print("ERROR OCCURRED IN PARSING RESULT: " + jsonBody)
+                    continue
         else:
-            time.sleep(stepLen - 0.5)
+            time.sleep(stepLen - 0.01)
         index = (index + 1) % len(texts)
         if index == 0:
             if stopMode == "time" or stopMode == "incremental":
                 random.shuffle(texts)
             elif stopMode == "num":
                 break
-        if stopMode == "incremental" and time.time() > globalTime + deltaTime:
+        if stopMode == "incremental" and time.time() > globalTime + executionTime:
             break
     print("--- Thread number " + str(i) + " finished! ---")
     obj = {"bodies": bodies, "thread_time": time.time() - start_time}
@@ -106,7 +110,7 @@ def doWriteRequest(result, token, i, textList):
 def doReadRequest(result, token, i):
     index = 0
     start_time = time.time()
-    localEndTime = start_time + deltaTime
+    localEndTime = start_time + executionTime
     bodies = []
     if stopMode == "time":
         s= time.strftime("%H:%M:%S", time.localtime(start_time))
@@ -121,16 +125,20 @@ def doReadRequest(result, token, i):
             startRequest = time.time()
             res = requests.get(basepathRead, params=params)
             print("[DEBUG] Status Code: " + str(res.status_code) + "; Thread number " + str(i))
-            if res.status_code == 200: 
-                jsonBody = json.loads(res.content)
-                jsonBody.update({"start_client_request": startRequest})
-                bodies.append(jsonBody)
+            if res.status_code == 200:
+                try: 
+                    jsonBody = json.loads(res.content)
+                    jsonBody.update({"start_client_request": startRequest})
+                    bodies.append(jsonBody)
+                except AttributeError:
+                    print("ERROR OCCURRED IN PARSING RESULT: " + jsonBody)
+                    continue
         else:
-            time.sleep(stepLen - 0.5)
+            time.sleep(stepLen - 0.01)
         index += 1
         if stopMode == "num" and index >= sizeText:
             break
-        elif stopMode == "incremental" and time.time() > globalTime + deltaTime:
+        elif stopMode == "incremental" and time.time() > globalTime + executionTime:
             break
     print("--- Thread number " + str(i) + " finished! ---")
     obj = {"bodies": bodies, "thread_time": time.time() - start_time}
@@ -150,12 +158,13 @@ print(f'Current mode: {mode}')
 print(f'Number of thread: {numThreads}')
 if stopMode == 'time':
     print(f'Text list size: {sizeText}')
-    print(f'Execution time: {deltaTime}s')
+    print(f'Execution time: {executionTime}s')
 elif stopMode == 'num':
     print(f'Number of request per thread: {sizeText}')
 elif stopMode == 'incremental':
     print(f'Text list size: {sizeText}')
-    print(f'Incremental time: {deltaTime}s')
+    print(f'Incremental time: {executionTime}s')
+    print(f'Step time: {stepLen}')
 print()
 
 
