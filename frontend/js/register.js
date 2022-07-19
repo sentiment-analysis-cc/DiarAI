@@ -49,7 +49,8 @@ userPool.signUp(personalname, password, attributeList, null, function(err, resul
     cognitoUser = result.user;
     console.log('user name is ' + cognitoUser.getUsername());
     //change elements of page
-    document.getElementById("titleheader").innerHTML = "Check your email for a verification link";
+    //document.getElementById("titleheader").innerHTML = "Check your email for a verification link";
+    window.location.href = "login.html";
     
 });
 }
