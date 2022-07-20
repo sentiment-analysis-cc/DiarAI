@@ -22,7 +22,7 @@ function submitButton() {
         // TO-DO: fare con post
         let res = $.ajax({
             type: "GET",
-            url: "https://blwdljp75pvc5eswhthjx66a4m0hdbyv.lambda-url.us-east-1.on.aws/", //_config.lambda_url,
+            url: _config.lambda_url, //_config.lambda_url,
             data: postData,
             success: function(data) {
                 alert("Succesfully submit entry! Your sentiment value is " + data["compound"])

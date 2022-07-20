@@ -111,6 +111,7 @@ button {
   background-color: #0080ff;
   color: white;
   font-family: 'Space Mono', monospace;
+  cursor: pointer;
 }
 
 /* Section Container Positions, Spacing, Utilities */
@@ -130,49 +131,6 @@ header {
   width: 100%;
   margin: 0 auto;
   padding: 1em 1em;
-}
-
-.container-row {
-  width: 90%;
-  margin: 0 auto;
-}
-
-/* Button Standard */
-
-.btn-main,
-.btn-light,
-.btn-dark {
-  display: block;
-  padding: 0.6rem 2rem;
-  margin: 1rem;
-  transition: all 0.1s;
-  border: none;
-  border-radius: 2px;
-  cursor: pointer;
-}
-
-.btn-main {
-  color: lightgoldenrodyellow;
-  background-color: lightcoral;
-}
-
-.btn-light {
-  color: #0a2472;
-  background-color: white;
-}
-
-.btn-dark {
-  color: white;
-  background-color: #0a2472;
-}
-
-button[class^='btn-']:hover,
-a[class^='btn-']:hover,
-input[class^='btn-']:hover {
-  background-color: lightgoldenrodyellow;
-  color: lightcoral;
-  font-weight: 700;
-  transform: scale(1.08);
 }
 
 /* Project Starts Here */
@@ -217,11 +175,7 @@ input[class^='btn-']:hover {
   display: block;
   margin:auto;
   justify-content: center;
-}
-
-.entry-form {
-  max-width: 100%;
-  margin: 0 auto;
+  width: 90%;
 }
 
 .journal-label {
@@ -269,47 +223,7 @@ input[class^='btn-']:hover {
   font-size: 1rem;
 }
 
-.entry-submit-btn {
-  margin: 0;
-}
-
-/* Journal Results Section */
-
-.sectionEntryResults {
-  width: 100%;
-  margin: 0 auto;
-}
-
-.entryResultRow {
-  /* display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  width: 100%;
-  margin: 1em auto; */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
-}
-
-.single-entry-div {
-  max-width: 100%;
-  justify-content: center;
-  margin: 1em auto;
-  padding: 1em 1em;
-}
-
-.single-entry-date {
-  background-color: lightgoldenrodyellow;
-  width: 100%;
-}
-
-.heading-results {
-  text-align: center;
-  text-decoration: underline;
-  text-decoration-color: lightgoldenrodyellow;
-}
-
-.modal {
+#modal {
   z-index:3;
   padding-top:100px;
   position:fixed;
@@ -320,23 +234,6 @@ input[class^='btn-']:hover {
   overflow:auto;
   background-color:rgb(0,0,0);
   background-color:rgba(0,0,0,0.4);
-}
-
-/* Modal Header */
-.modal-header {
-  padding: 2px 16px;
-  background-color: #5cb85c;
-  color: white;
-}
-
-/* Modal Body */
-.modal-body {padding: 2px 16px;}
-
-/* Modal Footer */
-.modal-footer {
-  padding: 2px 16px;
-  background-color: #5cb85c;
-  color: white;
 }
 
 /* Modal Content */
