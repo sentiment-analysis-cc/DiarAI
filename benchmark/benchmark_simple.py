@@ -15,7 +15,7 @@ from plotter import benchmarkPlot
 numThreads = 200
 scalingPercentages = [10, 20, 50, 100, 100, 100, 50, 20, 10]
 scalingSteps = len(scalingPercentages)
-scalingTime = 5
+scalingTime = 400
 totalExecutionTime = scalingTime * scalingSteps
 
 tokens = []
