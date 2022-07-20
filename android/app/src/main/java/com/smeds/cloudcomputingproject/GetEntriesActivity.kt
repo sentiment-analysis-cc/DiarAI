@@ -36,10 +36,19 @@ class GetEntriesActivity : AppCompatActivity(), EntryRecyclerAdapter.EntryClickL
         setContentView(R.layout.activity_get_entries)
 
         prefs = PreferenceManager.getDefaultSharedPreferences(this)
+        // Start the loading animation on ui thread
+        runOnUiThread {
+            Loader.setProgressDialog(this)
+        }
 
+        getAllEntries()
+
+        runOnUiThread {
+            Loader.dismissProgressDialog()
+        }
     }
 
-    fun getAllEntries(view: View) {
+    fun getAllEntries() {
 
 //        title = findViewById<EditText>(R.id.text_title).text.toString()
 //        entry = findViewById<EditText>(R.id.text_entry).text.toString()

@@ -2,11 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/CloudComputingProject.iml" filepath="$PROJECT_DIR$/.idea/modules/CloudComputingProject.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/CloudComputingProject.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/CloudComputingProject.app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/CloudComputingProject.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/CloudComputingProject.app.androidTest.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/CloudComputingProject.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/CloudComputingProject.app.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/CloudComputingProject.app.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/CloudComputingProject.app.unitTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/DiarAI.iml" filepath="$PROJECT_DIR$/.idea/modules/DiarAI.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/DiarAI.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/DiarAI.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/DiarAI.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/DiarAI.app.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/DiarAI.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/DiarAI.app.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/DiarAI.app.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/DiarAI.app.unitTest.iml" />
     </modules>
   </component>
 </project>

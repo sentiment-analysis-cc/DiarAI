@@ -58,7 +58,7 @@
     <content url="file://$MODULE_DIR$/../../../app/src/testDebug" />
     <orderEntry type="jdk" jdkName="Android API 32 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="CloudComputingProject.app.main" scope="TEST" />
+    <orderEntry type="module" module-name="DiarAI.app.main" scope="TEST" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.21" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib:1.6.21" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-common:1.6.21" level="project" />
@@ -125,5 +125,5 @@
     <orderEntry type="library" scope="TEST" name="Gradle: androidx.fragment:fragment-ktx:1.2.4@aar" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: com.liftric:cognito-idp-android-debug:2.5.0@aar" level="project" />
   </component>
-  <component name="TestModuleProperties" production-module="CloudComputingProject.app.main" />
+  <component name="TestModuleProperties" production-module="DiarAI.app.main" />
 </module>

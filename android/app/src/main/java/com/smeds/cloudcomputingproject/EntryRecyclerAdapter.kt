@@ -107,6 +107,10 @@ class EntryRecyclerAdapter (context: Context, entry : List<DiaryEntry>) :
                         val json = JSONObject(res)
                         val text = json.getString("text")
 
+                        (context as Activity).runOnUiThread {
+                            Loader.setProgressDialog(context)
+                        }
+
                         // Run on UI thread
                         (context as Activity).runOnUiThread {
                             createPopupDialog(text)
@@ -139,6 +143,10 @@ class EntryRecyclerAdapter (context: Context, entry : List<DiaryEntry>) :
 
             popupClose.setOnClickListener {
                 dialog.dismiss()
+            }
+
+            (context as Activity).runOnUiThread {
+                Loader.dismissProgressDialog()
             }
         }
     }

@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.View
 import android.widget.EditText
 import android.widget.Toast
+import android.app.AlertDialog
 import androidx.lifecycle.lifecycleScope
 import com.liftric.cognito.idp.IdentityProviderClient
 import kotlinx.coroutines.launch
@@ -17,6 +18,7 @@ import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
+    lateinit var dialog: AlertDialog
     lateinit var mail : String
     lateinit var password : String
     lateinit var prefs : SharedPreferences
@@ -34,6 +36,11 @@ class MainActivity : AppCompatActivity() {
 
         mail = findViewById<EditText>(R.id.email_text).text.toString()
         password = findViewById<EditText>(R.id.pw_text).text.toString()
+
+        // Set the loader dialog on ui thread
+        lifecycleScope.launch {
+            Loader.setProgressDialog(this@MainActivity)
+        }
 
         lifecycleScope.launch {
 
@@ -70,6 +77,9 @@ class MainActivity : AppCompatActivity() {
             prefsEditor.putString("token", accessToken)
             prefsEditor.putBoolean("loggedIn", true)
             prefsEditor.commit()
+
+            // Dismiss the loader dialog on ui thread
+            Loader.dismissProgressDialog()
 
             val intent = Intent(this@MainActivity, DiaryEntryActivity::class.java)
             startActivity(intent)
