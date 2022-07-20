@@ -15,11 +15,12 @@ from plotter import benchmarkPlot
 numThreads = 200
 scalingPercentages = [10, 20, 50, 100, 100, 100, 50, 20, 10]
 scalingSteps = len(scalingPercentages)
-scalingTime = 400
+scalingTime = 200
 totalExecutionTime = scalingTime * scalingSteps
 
 tokens = []
 basepathWrite = "https://blwdljp75pvc5eswhthjx66a4m0hdbyv.lambda-url.us-east-1.on.aws/"
+basepathRead = "https://uuq3nqiwkutez37nremubegf6i0xqjsz.lambda-url.us-east-1.on.aws/"
 p_diaryTitle = "Test Diary Title"
 p_text = "I am very happy. Or sad. Either way, this is a test diary entry that has been sent to the server."
 
@@ -51,7 +52,18 @@ def createRequest(token, i):
         print("[DEBUG] Status Code: " + str(res.status_code) + "; Thread number " + str(i))
         #
         shouldSleep(i, threadStartingTime)
-        
+
+def readRequest(token, i):
+    threadStartingTime = time.time()
+    shouldSleep(i, threadStartingTime)
+    while True:
+        params = ({"token": token, "type": "benchmark"})
+        res = requests.get(basepathRead, params=params)
+        print("[DEBUG] Status Code: " + str(res.status_code) + "; Thread number " + str(i))
+        #
+        shouldSleep(i, threadStartingTime)
+
+
 def shouldSleep(i, threadStartingTime):
     currentTime = time.time()
     deltaTime = currentTime - threadStartingTime
@@ -74,7 +86,7 @@ def shouldSleep(i, threadStartingTime):
 # # # # # # MAIN OPERATIONS
 
 print(f"Number of threads: {numThreads}")
-print(f"ETA: {totalExecutionTime}")
+print(f"ETA: {totalExecutionTime}s")
 
 # Log in numThread users
 print(f"--- Logging in {numThreads} users... ---")
@@ -84,7 +96,7 @@ print("--- Done! Starting threads... ---")
 threads = []
 # Start numThread threads
 for i in range(numThreads):
-    t = threading.Thread(target=createRequest, args=[tokens[i], i])
+    t = threading.Thread(target=readRequest, args=[tokens[i], i])
     t.daemon=True
     threads.append(t)
 
